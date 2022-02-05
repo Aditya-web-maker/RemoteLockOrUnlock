@@ -28,7 +28,7 @@ public class RLULFeatureValidateImpl implements RLULFeatureValidateService{
             conn.setRequestMethod("GET");
 
             if (conn.getResponseCode() != 200) {
-                log.error("failed to get response");
+                log.error("failed to get response from the server");
                 throw new RuntimeException("Failed : HTTP error code : "
                         + conn.getResponseCode());
             }

@@ -21,6 +21,7 @@ public class RemoteController {
 
     @Autowired
     private VINValidate vinValidate;
+    //adfkahsdf
 
     @RequestMapping(value = "/{VIN}/{Status}", method = RequestMethod.PUT)
     public ResponseEntity<Object> vehicleAPI(@PathVariable("VIN") String vin, @PathVariable("Status") String status) {
