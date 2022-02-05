@@ -1,6 +1,8 @@
 package com.application.remote.rlul.service;
 
+import com.application.remote.rlul.service.impl.UpdateLockServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,14 @@ import java.net.URL;
 import static java.sql.Types.NULL;
 @Service
 @Slf4j
-public class TcuValidation {
 
+public class TcuValidation {
+    @Autowired
+    UpdateLockServiceImpl localservice;
     public String validate(String vin,String status){
         log.info("entered TcuValidation ");
         String output=null;
+        String response=null;
         try {
 
             URL url = new URL("http://localhost:9101/api/v1/isTCUEnabled/"+vin );
@@ -54,12 +59,14 @@ public class TcuValidation {
         if (output != null && output.equalsIgnoreCase("y"))
         {
             log.info("calling rlul");
+            response=localservice.updateLockStatus(vin, status);
+
         }
         else
         {
             throw new RuntimeException("Failed: rlul cant be called");
         }
-        return null;
+        return response;
 
 
 
