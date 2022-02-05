@@ -1,5 +1,8 @@
 package com.application.remote.rlul.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -9,30 +12,32 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static java.sql.Types.NULL;
 @Service
-public class VINValidate {
+@Slf4j
+public class TcuValidation {
 
-    public String isvalidVIN(String vin, String status) {
-
+    public String validate(String vin,String status){
+        log.info("entered TcuValidation ");
+        String output=null;
         try {
-            String validateVinUrl= "http://localhost:9101/api/v1/isValidVehicle/"+vin;
-            URL url = new URL(validateVinUrl);
+
+            URL url = new URL("http://localhost:9101/api/v1/isTCUEnabled/"+vin );
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
 
-            String output;
-            System.out.println("Output from Server .... \n");
+
+            log.info("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                log.info(output);
             }
 
             conn.disconnect();
@@ -46,8 +51,23 @@ public class VINValidate {
             e.printStackTrace();
 
         }
-
+        if (output != null && output.equalsIgnoreCase("y"))
+        {
+            log.info("calling rlul");
+        }
+        else
+        {
+            throw new RuntimeException("Failed: rlul cant be called");
+        }
         return null;
-    }
-}
 
+
+
+
+    }
+
+
+
+
+
+}
