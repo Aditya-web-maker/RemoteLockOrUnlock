@@ -21,17 +21,11 @@ public class RemoteController {
 
     @Autowired
     private VINValidate vinValidate;
-    //adfkahsdf
 
     @RequestMapping(value = "/{VIN}/{Status}", method = RequestMethod.PUT)
     public ResponseEntity<Object> vehicleAPI(@PathVariable("VIN") String vin, @PathVariable("Status") String status) {
         String rlulResponse =  vinValidate.isvalidVIN(vin, status);
         return ResponseEntity.status(HttpStatus.OK).body(rlulResponse);
-    }
-
-    @RequestMapping(value="/{VIN}", method = RequestMethod.GET)
-    public ResponseEntity<Object> getVehicleHistory(@PathVariable("VIN") String vin) {
-        return ResponseEntity.status(HttpStatus.OK).body("test string");
     }
 
 }

@@ -3,6 +3,7 @@ package com.application.remote.rlul.service;
 import com.application.remote.rlul.controller.model.RLULFeatureValidateResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -16,9 +17,13 @@ import java.net.URL;
 @Slf4j
 public class RLULFeatureValidateImpl implements RLULFeatureValidateService{
 
+    @Autowired
+    private UpdateLockService updateLockService;
+
     @Override
     public String isValidFeature(String vin, String status){
         log.info("entered isValidFeature method");
+        String update;
         String validateURL = "http://localhost:9101/api/v1/isValidFeature/"+vin+"/RLUL";
         String output=null;
         Boolean isValidRLUL = false;
@@ -54,11 +59,13 @@ public class RLULFeatureValidateImpl implements RLULFeatureValidateService{
         }
         if(isValidRLUL) {
             log.info("RLUL validated. Calling updateDatabase function");
+            update = updateLockService.updateLockStatus(vin, status);
         }else {
             log.info("RLUL feature absent, throwing error");
             throw new RuntimeException("RLUL feature absent, invalidate");
         }
         log.info("Returning from isValidFeature function");
-        return isValidRLUL.toString();
+
+        return update;
     }
 }
