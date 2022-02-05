@@ -16,7 +16,6 @@ public class VINValidate {
 
         try {
             String validateVinUrl= "http://localhost:9101/api/v1/isValidVehicle/"+vin;
-
             URL url = new URL(validateVinUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
