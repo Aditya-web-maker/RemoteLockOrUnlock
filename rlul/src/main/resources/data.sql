@@ -1,0 +1,1 @@
+INSERT INTO RLUL_DATA(vin,command,status,timestamp )VALUES ('WDD2906611A004817','LOCK','Success',PARSEDATETIME('2022-05-02','yyyy-MM-dd'));
